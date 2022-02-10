@@ -7,23 +7,30 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 public class AppInitializer implements WebApplicationInitializer {
 
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
-        WebApplicationContext context = getContext();
-        servletContext.addListener(new ContextLoaderListener(context));
-        ServletRegistration.Dynamic dispatcher = servletContext.addServlet("DispatcherServlet", new DispatcherServlet(context));
+    public void onStartup(ServletContext servletContext) {
+        WebApplicationContext webAppContext = getWebAppContext();
+        WebApplicationContext rootAppContext = getRootWebConfig();
+
+        servletContext.addListener(new ContextLoaderListener(rootAppContext));
+        ServletRegistration.Dynamic dispatcher = servletContext.addServlet("DispatcherServlet", new DispatcherServlet(webAppContext));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/*");
     }
 
-    private AnnotationConfigWebApplicationContext getContext() {
+    private AnnotationConfigWebApplicationContext getWebAppContext() {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.setConfigLocation("com.andrew.config");
+        context.setConfigLocation("com.andrew.config.WebApp");
+        return context;
+    }
+
+    private AnnotationConfigWebApplicationContext getRootWebConfig() {
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.setConfigLocation("com.andrew.config.App");
         return context;
     }
 

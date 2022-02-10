@@ -1,4 +1,4 @@
-package com.andrew.initializer;
+package com.andrew.config.initializer;
 
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;

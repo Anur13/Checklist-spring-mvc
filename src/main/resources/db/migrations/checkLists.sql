@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS checklist (
+CREATE TABLE IF NOT EXISTS checkLists (
     id SERIAL,
     name VARCHAR (50),
     userId INTEGER REFERENCES users (id),

@@ -1,5 +1,7 @@
 package com.andrew.config.App;
 
+import com.andrew.dao.jdbc.JdbcCheckListDao;
+import com.andrew.service.CheckListService;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,5 +37,15 @@ public class AppConfig {
     @Bean
     public JdbcTemplate getJDBCTemplate() {
         return new JdbcTemplate(getDataSource());
+    }
+
+    @Bean
+    public JdbcCheckListDao getJdbcCheckListDao() {
+        return new JdbcCheckListDao(getJDBCTemplate());
+    }
+
+    @Bean
+    public CheckListService getCheckListService() {
+        return new CheckListService(getJdbcCheckListDao());
     }
 }

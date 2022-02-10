@@ -3,4 +3,4 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR (50),
     password VARCHAR (50),
     PRIMARY KEY (id)
-    )
+    );

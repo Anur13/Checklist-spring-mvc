@@ -8,4 +8,6 @@ import lombok.Data;
 public class CheckListItem {
     private String content;
     private boolean completed;
+    private int checkListId;
+    private String checkListName;
 }

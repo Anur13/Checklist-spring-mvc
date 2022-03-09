@@ -1,22 +1,32 @@
 package com.andrew.web.controller;
 
 
+import com.andrew.DTO.ChecklistDto;
 import com.andrew.entities.CheckList;
 import com.andrew.service.CheckListService;
-import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
-@RequestMapping("/checklist")
-@AllArgsConstructor
+//@RequestMapping("list")
+@RequiredArgsConstructor
 public class CheckListController {
-    private CheckListService checkListService;
+    private final CheckListService checkListService;
 
-    @GetMapping
-    public CheckList getChecklist(@RequestParam int id) {
-        return checkListService.getCheckList(id, "First checklist");
+    private int id;
+
+    @GetMapping("/all")
+    public List<CheckList> getChecklist(HttpServletRequest request) {
+        id = (int) request.getAttribute("id");
+        return checkListService.getCheckList(id);
+    }
+
+    @PostMapping("/add")
+    public void createChecklist(HttpServletRequest request, @RequestBody ChecklistDto checklistDto) {
+        String userId = request.getAttribute("id").toString();
+        checkListService.createChecklist(checklistDto.getName(), userId);
     }
 }

@@ -1,15 +1,17 @@
 package com.andrew.config.App;
 
 import com.andrew.dao.jdbc.JdbcCheckListDao;
+import com.andrew.dao.jdbc.JdbcUserDao;
+import com.andrew.security.PasswordEncryptor;
 import com.andrew.service.CheckListService;
+import com.andrew.service.SecurityService;
+import com.andrew.service.UserService;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @ComponentScan(basePackages = "com.andrew")
@@ -45,7 +47,28 @@ public class AppConfig {
     }
 
     @Bean
+    public JdbcUserDao getJdbcUserDao() {
+        return new JdbcUserDao(getJDBCTemplate());
+    }
+
+    @Bean
+    public PasswordEncryptor getPasswordEncryptor() {
+        return new PasswordEncryptor();
+    }
+
+    @Bean
+    public SecurityService getSecurityService() {
+        return new SecurityService(getJdbcUserDao(), getPasswordEncryptor());
+    }
+
+    @Bean
     public CheckListService getCheckListService() {
         return new CheckListService(getJdbcCheckListDao());
     }
+
+    @Bean
+    public UserService getUserService() {
+        return new UserService(getSecurityService());
+    }
+
 }
